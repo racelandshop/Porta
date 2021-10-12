@@ -1,0 +1,12 @@
+{
+  "common": {
+    "version": "Versão",
+    "invalid_configuration": "Configuração Inválida",
+    "show_warning": "Mostrar Aviso",
+    "show_error": "Mostrar Erro"
+  },
+  "states":{
+      "on": "Ligado",
+      "off": "Desligado"
+  }
+}
