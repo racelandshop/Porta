@@ -1,7 +1,7 @@
 import { ActionConfig, LovelaceCard, LovelaceCardConfig, LovelaceCardEditor } from 'custom-card-helpers';
 declare global {
   interface HTMLElementTagNameMap {
-    'fan-card-editor': LovelaceCardEditor;
+    'porta-card-editor': LovelaceCardEditor;
     'hui-error-card': LovelaceCard;
   }
 }
@@ -23,6 +23,6 @@ export interface EditorTarget extends EventTarget {
   index?: number;
   checked?: boolean;
   configValue?: string;
-  type?: HTMLInputElement["type"];
+  type?: HTMLInputElement['type'];
   config: ActionConfig;
 }

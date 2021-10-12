@@ -32,7 +32,7 @@ const plugins = [
 
 export default [
   {
-    input: 'src/fan-card.ts',
+    input: 'src/porta-card.ts',
     output: {
       dir: 'dist',
       format: 'es',

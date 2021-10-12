@@ -4,8 +4,7 @@ import { LitElement, html, TemplateResult, css, CSSResultGroup } from 'lit';
 import { HomeAssistant, fireEvent, LovelaceCardEditor, ActionConfig } from 'custom-card-helpers';
 import { BoilerplateCardConfig, EditorTarget } from './types';
 import { customElement, property, state } from 'lit/decorators';
-import { assert } from 'superstruct';
-
+// import { assert } from 'superstruct';
 
 const cardConfigStruct = {
   required: {
@@ -14,9 +13,9 @@ const cardConfigStruct = {
   },
 };
 
-const includeDomains = ["switch"];
+const includeDomains = ['switch'];
 
-@customElement('fan-card-editor')
+@customElement('porta-card-editor')
 export class BoilerplateCardEditor extends LitElement implements LovelaceCardEditor {
   @property({ attribute: false }) public hass?: HomeAssistant;
   @state() private _config?: BoilerplateCardConfig;
@@ -88,14 +87,12 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
       <div class="card-config">
         <div class="option" @click=${this._toggleOption} .option=${'required'}>
               <ha-entity-picker
-              .label="${this.hass.localize(
-      "ui.panel.lovelace.editor.card.generic.entity"
-    )} (${this.hass.localize(
-      "ui.panel.lovelace.editor.card.config.optional"
+              .label="${this.hass.localize('ui.panel.lovelace.editor.card.generic.entity')} (${this.hass.localize(
+      'ui.panel.lovelace.editor.card.config.optional',
     )})"
           .hass=${this.hass}
           .value=${this._entity}
-          .configValue=${"entity"}
+          .configValue=${'entity'}
           .includeDomains=${includeDomains}
           @value-changed=${this._valueChanged}
           allow-custom-entity
@@ -103,34 +100,36 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
 
     <div class="side-by-side">
         <paper-input
-        .label="${this.hass.localize("ui.panel.lovelace.editor.card.generic.name")} (${this.hass.localize("ui.panel.lovelace.editor.card.config.optional")})"
+        .label="${this.hass.localize('ui.panel.lovelace.editor.card.generic.name')} (${this.hass.localize(
+      'ui.panel.lovelace.editor.card.config.optional',
+    )})"
 
         .value=${this._name}
-        .configValue=${"name"}
+        .configValue=${'name'}
         @value-changed=${this._valueChanged}
         ></paper-input>
     </div class="side-by-side">
 
     <div class="div-options">
         <ha-formfield
-        .label=${this.hass.localize("ui.panel.lovelace.editor.card.generic.show_name")}
+        .label=${this.hass.localize('ui.panel.lovelace.editor.card.generic.show_name')}
         .dir=${this.dir}
         >
         <ha-switch
         .checked=${this._show_name !== false}
-        .configValue=${"show_name"}
+        .configValue=${'show_name'}
         @change=${this._change}
         ></ha-switch>
         </ha-formfield>
 
         <ha-formfield
-        .label=${this.hass.localize("ui.panel.lovelace.editor.card.generic.show_state")}
-        ${console.log(this.hass.localize("ui.panel.lovelace.editor.card.generic.show_state"))}
+        .label=${this.hass.localize('ui.panel.lovelace.editor.card.generic.show_state')}
+        ${console.log(this.hass.localize('ui.panel.lovelace.editor.card.generic.show_state'))}
         .dir=${this.dir}
         >
         <ha-switch
         .checked=${this._show_state !== false}
-        .configValue=${"show_state"}
+        .configValue=${'show_state'}
          @change=${this._change}
          ></ha-switch>
          </ha-formfield>
@@ -152,7 +151,7 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
       return;
     }
 
-    fireEvent(this, "config-changed", {
+    fireEvent(this, 'config-changed', {
       config: {
         ...this._config,
         [target.configValue!]: value,

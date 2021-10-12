@@ -47,16 +47,16 @@ console.info(
 // This puts your card into the UI card picker dialog
 (window as any).customCards = (window as any).customCards || [];
 (window as any).customCards.push({
-  type: 'fan-card',
-  name: 'fan-card',
+  type: 'porta-card',
+  name: 'Porta / Garagem',
   description: 'A template custom card for you to create something awesome',
 });
 
 // TODO Name your custom element
-@customElement('fan-card')
+@customElement('porta-card')
 export class BoilerplateCard extends LitElement {
   public static async getConfigElement(): Promise<LovelaceCardEditor> {
-    return document.createElement('fan-card-editor');
+    return document.createElement('porta-card-editor');
   }
 
   @queryAsync('mwc-ripple') private _ripple!: Promise<Ripple | null>;
@@ -149,12 +149,12 @@ export class BoilerplateCard extends LitElement {
           hasDoubleClick: hasAction(this.config.double_tap_action),
         })}
         tabindex="0"
-        .label=${`fan: ${this.config.entity || 'No Entity Defined'}`}
+        .label=${`porta: ${this.config.entity || 'No Entity Defined'}`}
       >
       ${this.config.show_icon
           ? html`
               <ha-icon
-                class="fan-icon ${classMap({
+                class="porta-icon ${classMap({
                  "state-on": ifDefined(
                    stateObj ? this.computeActiveState(stateObj) : undefined) === "on",
                   "state-off": ifDefined(
@@ -208,8 +208,8 @@ export class BoilerplateCard extends LitElement {
     </div>
 
 
-    <!-- É criado este código para transformar o texto debaixo da "Fan" em "On" e "Off" -->
-    <!-- A ordem foi trocada para garantir que o "On" e "Off" estão debaixo do nome da "Fan" -->
+    <!-- É criado este código para transformar o texto debaixo da "Porta" em "On" e "Off" -->
+    <!-- A ordem foi trocada para garantir que o "On" e "Off" estão debaixo do nome da "Porta" -->
 
 
 
@@ -330,13 +330,13 @@ private computeActiveState = (stateObj: HassEntity): string => {
         text-align: left;
         width: 100%;
       }
-      .fan-icon.state-on {
+      .porta-icon.state-on {
         color: var(--paper-item-icon-active-color, #fdd835);
         animation: rotate 9s linear;
         animation-delay: 0s;
         animation-iteration-count: infinite;
       }
-      .fan-icon.state-unavailable {
+      .porta-icon.state-unavailable {
         color: var(--state-icon-unavailable-color, #bdbdbd);
       }
       @keyframes rotate {
