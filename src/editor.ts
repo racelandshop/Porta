@@ -12,12 +12,11 @@ const cardConfigStruct = {
     show: true,
   },
 };
-const room = 'd="M11.4,1.4h27.2v43.1H11.4V1.4z" fill="#bcbcbc"';
-const door = 'd="M11.4 1.4v43.1h27.2V1.4H11.4zm23 23.4c0 1.1-.9 1.9-1.9 1.9h0c-1.1 0-1.9-.9-1.9-1.9V21c0-1.1.9-1.9 1.9-1.9h0c1.1 0 1.9.9 1.9 1.9v3.8z"';
+const room = "M11.4,1.4h27.2v43.1H11.4V1.4z";
+const door = "M11.4 1.4v43.1h27.2V1.4H11.4zm23 23.4c0 1.1-.9 1.9-1.9 1.9h0c-1.1 0-1.9-.9-1.9-1.9V21c0-1.1.9-1.9 1.9-1.9h0c1.1 0 1.9.9 1.9 1.9v3.8z";
 
 
 const includeDomains = ['switch'];
-
 @customElement('porta-card-editor')
 export class BoilerplateCardEditor extends LitElement implements LovelaceCardEditor {
   @property({ attribute: false }) public hass?: HomeAssistant;
@@ -79,34 +78,26 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
     if (!this.hass || !this._helpers) {
       return html``;
     }
-
-    // The climate more-info has ha-switch and paper-dropdown-menu elements that are lazy loaded unless explicitly done here
     this._helpers.importMoreInfoControl('climate');
-
-    // You can restrict on domain type
-    const entities = Object.keys(this.hass.states).filter(eid => eid.substr(0, eid.indexOf('.')) === 'switch');
+    const entities = Object.keys(this.hass.states).filter(
+      (eid) => eid.substr(0, eid.indexOf('.')) === 'switch');
 
     return html`
       <div class="card-config">
-        <div class="option" @click=${this._toggleOption} .option=${'required'}>
+        <div class="option" .option=${'required'}>
               <ha-entity-picker
-              .label="${this.hass.localize('ui.panel.lovelace.editor.card.generic.entity')} (${this.hass.localize(
-      'ui.panel.lovelace.editor.card.config.optional',
-    )})"
+              .label="${this.hass.localize('ui.panel.lovelace.editor.card.generic.entity')} (${this.hass.localize('ui.panel.lovelace.editor.card.config.optional')})"
           .hass=${this.hass}
           .value=${this._entity}
           .configValue=${'entity'}
           .includeDomains=${includeDomains}
           @value-changed=${this._valueChanged}
-          allow-custom-entity
-              ></ha-entity-picker>
+          allow-custom-entity>
+        </ha-entity-picker>
 
     <div class="side-by-side">
         <paper-input
-        .label="${this.hass.localize('ui.panel.lovelace.editor.card.generic.name')} (${this.hass.localize(
-      'ui.panel.lovelace.editor.card.config.optional',
-    )})"
-
+        .label="${this.hass.localize('ui.panel.lovelace.editor.card.generic.name')} (${this.hass.localize('ui.panel.lovelace.editor.card.config.optional')})"
         .value=${this._name}
         .configValue=${'name'}
         @value-changed=${this._valueChanged}
@@ -116,42 +107,45 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
     <div class="div-options">
         <ha-formfield
         .label=${this.hass.localize('ui.panel.lovelace.editor.card.generic.show_name')}
-        .dir=${this.dir}
-        >
+        .dir=${this.dir}>
         <ha-switch
         .checked=${this._show_name !== false}
         .configValue=${'show_name'}
-        @change=${this._change}
-        ></ha-switch>
-        </ha-formfield>
+        @change=${this._change}>
+      </ha-switch>
+      </ha-formfield>
 
-        <ha-formfield
-        .label=${this.hass.localize('ui.panel.lovelace.editor.card.generic.show_state')}
-        ${console.log(this.hass.localize('ui.panel.lovelace.editor.card.generic.show_state'))}
-        .dir=${this.dir}
-        >
-        <ha-switch
+      <ha-formfield
+      .label=${this.hass.localize('ui.panel.lovelace.editor.card.generic.show_state')}
+      .dir=${this.dir}>
+      <ha-switch
         .checked=${this._show_state !== false}
         .configValue=${'show_state'}
-         @change=${this._change}
-         ></ha-switch>
-         </ha-formfield>
+        @change=${this._change}>
+      </ha-switch>
+      </ha-formfield>
 
-         <paper-dropdown-menu>
+      <paper-dropdown-menu>
+      <paper-listbox slot="dropdown-content"
+        attr-for-selected="value"
+        .configValue=${"icon"}
+        selected='1'
+        @iron-select=${this._changed_icon}>
+
+
           <paper-item .value=${[room, door]}>
               <svg viewBox="0 0 50 50" height="24" width="24" >
               <path fill="#bcbcbc" d="M11.4,1.4h27.2v43.1H11.4V1.4z"/>
               <path d="M11.4 1.4v43.1h27.2V1.4H11.4zm23 23.4c0 1.1-.9 1.9-1.9 1.9h0c-1.1 0-1.9-.9-1.9-1.9V21c0-1.1.9-1.9 1.9-1.9h0c1.1 0 1.9.9 1.9 1.9v3.8z"/>
               </svg>Porta
           </paper-item>
+          </paper-listbox>
         </paper-dropdown-menu>
     </div>
-
-
     `;
   }
 
-  private _change(ev: Event) {
+  private _change(ev: Event): void{
     if (!this._config || !this.hass) {
       return;
     }
@@ -181,18 +175,18 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
     this._helpers = await (window as any).loadCardHelpers();
   }
 
-  private _toggleOption(ev): void {
-    this._toggleThing(ev, Option);
-  }
+  // private _toggleOption(ev): void {
+  //   this._toggleThing(ev, Option);
+  // }
 
-  private _toggleThing(ev, optionList): void {
-    const show = !optionList[ev.target.option].show;
-    for (const [key] of Object.entries(optionList)) {
-      optionList[key].show = false;
-    }
-    optionList[ev.target.option].show = show;
-    this._toggle = !this._toggle;
-  }
+  // private _toggleThing(ev, optionList): void {
+  //   const show = !optionList[ev.target.option].show;
+  //   for (const [key] of Object.entries(optionList)) {
+  //     optionList[key].show = false;
+  //   }
+  //   optionList[ev.target.option].show = show;
+  //   this._toggle = !this._toggle;
+  // }
 
   private _valueChanged(ev): void {
     if (!this._config || !this.hass) {
@@ -215,6 +209,16 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
       }
     }
     fireEvent(this, 'config-changed', { config: this._config });
+  }
+
+  private _changed_icon(ev): void {
+    if (!this.hass || ev.target.selected === "") {
+      return;
+    }
+    this._config = {
+      ...this._config, [ev.target.configValue]: ev.target.selected, "type": 'custom:porta-card'
+    }
+    fireEvent(this, "config-changed", { config: this._config });
   }
 
   static get styles(): CSSResultGroup {

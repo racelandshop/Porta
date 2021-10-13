@@ -39,7 +39,7 @@ import { localize } from './localize/localize';
 
 /* eslint no-console: 0 */
 console.info(
-  `%c  RACELAND-FAN-CARD \n%c  ${localize('common.version')} ${CARD_VERSION}    `,
+  `%c  RACELAND-porta-card \n%c  ${localize('common.version')} ${CARD_VERSION}    `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray',
 );
@@ -49,7 +49,7 @@ console.info(
 (window as any).customCards.push({
   type: 'porta-card',
   name: 'Porta / Garagem',
-  description: 'A template custom card for you to create something awesome',
+  description: "Uma carta customizada da Porta e Garagem",
 });
 
 // TODO Name your custom element
@@ -62,7 +62,13 @@ export class BoilerplateCard extends LitElement {
   @queryAsync('mwc-ripple') private _ripple!: Promise<Ripple | null>;
 
   public static getStubConfig(): object {
-    return {};
+    return {
+      "type": "custom:porta-card",
+      "entity": "switch.raceland",
+      "show_name": true,
+      "show_state": true,
+      "name": "raceland"
+    };
   }
 
   // TODO Add any properities that should cause your element to re-render here
@@ -83,7 +89,7 @@ export class BoilerplateCard extends LitElement {
 
     this.config = {
       show_icon: true,
-      icon: 'mdi:fan',
+      icon: 'mdi:Door',
       ...config,
       tap_action: {
         action: "toggle",
@@ -140,10 +146,8 @@ export class BoilerplateCard extends LitElement {
         "state-off": ifDefined(
           stateObj ? this.computeActiveState(stateObj) : undefined) === "off",
       })}"
-
         @action=${this._handleAction}
         @focus="${this.handleRippleFocus}"
-
         .actionHandler=${actionHandler({
           hasHold: hasAction(this.config.hold_action),
           hasDoubleClick: hasAction(this.config.double_tap_action),
@@ -153,27 +157,21 @@ export class BoilerplateCard extends LitElement {
       >
       ${this.config.show_icon
           ? html`
-              <ha-icon
-                class="porta-icon ${classMap({
-                 "state-on": ifDefined(
-                   stateObj ? this.computeActiveState(stateObj) : undefined) === "on",
-                  "state-off": ifDefined(
-                   stateObj ? this.computeActiveState(stateObj) : undefined) === "off",
-                  "state-unavailable": ifDefined(
-                   stateObj ? this.computeActiveState(stateObj) : undefined) === "unavailable"
-               })}"
-                tabindex="-1"
-                data-domain=${ifDefined(
-                  this.config.state_color && stateObj
-                    ? computeStateDomain(stateObj)
-                    : undefined
-                )}
-                data-state=${ifDefined(
-                  stateObj ? this.computeActiveState(stateObj) : undefined
-                )}
-                .icon=${this.config.icon}
+               <svg viewBox="0 0 50 50" height="100%" width="50%">
+                <path fill="#ffffff" d=${this.config.icon[0]} />
+                <path class=${classMap({
+                  "state-on-porta-icon":
+                      ifDefined(stateObj? this.computeActiveState(stateObj) : undefined) === "on",
+                    "state-off":
+                    ifDefined(stateObj ? this.computeActiveState(stateObj) : undefined) === "off",
+                  "state-unavailable":
+                    ifDefined(stateObj ? this.computeActiveState(stateObj) : undefined) === "unavailable",
+                }
+                    )
+                }
+                d=${this.config.icon[1]} />
 
-              ></ha-icon>
+</svg>
 
             `
     : ""}
@@ -297,7 +295,7 @@ private computeActiveState = (stateObj: HassEntity): string => {
         width: 50%;
         /* border: 2px solid #73AD21; */
         height: 100%;
-        padding: 0px 0px 0px 0px;
+        padding: 0px 0px 0px 80px;
         color: var(--paper-item-icon-color, #44739e);
         --mdc-icon-size: 100%;
       }
@@ -318,42 +316,44 @@ private computeActiveState = (stateObj: HassEntity): string => {
         grid-template-columns: 50% 50%;
       }
       .state-div {
-        /* padding: 100px 0px 100px 0px; */
-        /* border: 2px solid #73AD21; */
         padding: 0px 0px 0px 0px;
         text-align: left;
         width: 100%;
       }
       .name-div {
-        /* border: 2px solid #73AD21; */
         padding: 10% 0px 0px 0px;
         text-align: left;
         width: 100%;
       }
       .porta-icon.state-on {
         color: var(--paper-item-icon-active-color, #fdd835);
-        animation: rotate 9s linear;
-        animation-delay: 0s;
-        animation-iteration-count: infinite;
+        animation: state-on 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+      }
+      .opacity {
+        animation: opacity 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+      }
+      .reverse {
+        animation-direction: reverse;
       }
       .porta-icon.state-unavailable {
         color: var(--state-icon-unavailable-color, #bdbdbd);
       }
-      @keyframes rotate {
+      @keyframes state {
         0% {
-          transform: rotate(0deg);
-        }
-        25% {
-          transform: rotate(360deg);
-        }
-        50% {
-          transform: rotate(720deg);
-        }
-        75% {
-          transform: rotate(1080deg);
+          transform: none;
+          fill: #9da0a2;
         }
         100% {
-          transform: rotate(1440deg);
+          transform: skewY(10deg) translate(4.5%, -3.9%) scaleX(0.8);
+          fill: #b68349;
+        }
+      }
+      @keyframes opacity {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
         }
       }
       .state {
