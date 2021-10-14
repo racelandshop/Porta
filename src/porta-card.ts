@@ -123,7 +123,7 @@ export class BoilerplateCard extends LitElement {
       ${this.config.show_icon
           ? html`
           <!-- ${console.log("ICON", (JSON.stringify(this.config.icon )==JSON.stringify([room, door])))} -->
-            <svg viewBox="0 0 50 50" height="100%" width="50%">
+            <svg viewBox="0 0 50 50" height="100%" width="100%">
               <path fill="#ffffff" d=${this.config.icon[0]} />
               <path class=${classMap({
                 "state-on-porta-icon":
@@ -304,16 +304,15 @@ private computeActiveState = (stateObj: HassEntity): string => {
       }
       .state-on-garagem-icon {
         /* transform: skewY(10deg) translate(-4.5%, 3.9%) scaleX(-0.8); */
-        transition: all 0.5s ease-out;
-        visibility: hidden;
-        fill: #b68349;
+        /* transition: all 0.5s ease-out; */
+        transition: max-height 0.8s;
+        transform: translate(0, -14.5%);
+        fill: #ffffff;
       }
       .state-off-garagem-icon {
         /* transform: skewY(10deg) translate(4.5%, -3.9%) scaleX(0.8); */
-        transition: all 1.8s ease-out;
-        width: 100px;
-        height: 100px;
-        fill: #a2743f;
+        transition: all 0.8s ease-out;
+        fill: #ffffff;
       }
 
       .opacity {
