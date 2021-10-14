@@ -1,58 +1,35 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { RippleHandlers } from "@material/mwc-ripple/ripple-handlers";
 import { Ripple } from '@material/mwc-ripple';
-import {
-  LitElement,
-  html,
-  TemplateResult,
-  css,
-  PropertyValues,
-  CSSResultGroup,
-} from 'lit';
-
-
+import { LitElement, html, TemplateResult, css, PropertyValues, CSSResultGroup} from 'lit';
 import { HassEntity } from 'home-assistant-js-websocket'
 import { queryAsync } from 'lit-element'
 import { customElement, property, state } from "lit/decorators";
 import { ifDefined } from "lit/directives/if-defined";
 import { classMap } from "lit/directives/class-map";
-//import { styleMap } from "lit/directives/style-map";
-import {
-  HomeAssistant,
-  hasConfigOrEntityChanged,
-  hasAction,
-  ActionHandlerEvent,
-  handleAction,
-  LovelaceCardEditor,
-  getLovelace,
-  computeStateDomain,
-  // computeStateDisplay,
-  // FrontendTranslationData,
-} from 'custom-card-helpers'; // This is a community maintained npm module with common helper functions/types. https://github.com/custom-cards/custom-card-helpers
-
+import { HomeAssistant, hasConfigOrEntityChanged, hasAction, ActionHandlerEvent, handleAction, LovelaceCardEditor, getLovelace, computeStateDomain} from 'custom-card-helpers';
 import './editor';
 import type { BoilerplateCardConfig } from './types';
 import { actionHandler } from './action-handler-directive';
 import { CARD_VERSION } from './const';
 import { localize } from './localize/localize';
-//import { iconColorCSS } from "../../../common/style/icon_color_css";
 
-/* eslint no-console: 0 */
+const room = "M11.4,1.4h27.2v43.1H11.4V1.4z";
+const door = "M11.4 1.4v43.1h27.2V1.4H11.4zm23 23.4c0 1.1-.9 1.9-1.9 1.9h0c-1.1 0-1.9-.9-1.9-1.9V21c0-1.1.9-1.9 1.9-1.9h0c1.1 0 1.9.9 1.9 1.9v3.8z";
+const garageClosed = "M19,12H16V14H8V12M8,15H16V17H8V15M16,18V20H8V18H16Z";
+const garageOpen = "M19,20H17V11H7V20H5V9L12,5L19,9V20M8";
+
 console.info(
   `%c  RACELAND-porta-card \n%c  ${localize('common.version')} ${CARD_VERSION}    `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray',
 );
 
-// This puts your card into the UI card picker dialog
 (window as any).customCards = (window as any).customCards || [];
 (window as any).customCards.push({
   type: 'porta-card',
   name: 'Porta / Garagem',
   description: "Uma carta customizada da Porta e Garagem",
 });
-
-// TODO Name your custom element
 @customElement('porta-card')
 export class BoilerplateCard extends LitElement {
   public static async getConfigElement(): Promise<LovelaceCardEditor> {
@@ -71,14 +48,9 @@ export class BoilerplateCard extends LitElement {
     };
   }
 
-  // TODO Add any properities that should cause your element to re-render here
-  // https://lit.dev/docs/components/properties/
   @property({ attribute: false }) public hass!: HomeAssistant;
   @state() private config!: BoilerplateCardConfig;
-
-  // https://lit.dev/docs/components/properties/#accessors-custom
   public setConfig(config: BoilerplateCardConfig): void {
-    // TODO Check for required fields and that they are of the proper format
     if (!config) {
       throw new Error(localize('common.invalidconfiguration'));
     }
@@ -97,7 +69,6 @@ export class BoilerplateCard extends LitElement {
     };
   }
 
-
   public translate_state(stateObj): string{
     if(ifDefined(stateObj ? this.computeActiveState(stateObj) : undefined) === "on") {
       return localize("states.on");
@@ -111,22 +82,16 @@ export class BoilerplateCard extends LitElement {
     else {
       return ""
     }
-
 }
 
-
-  // https://lit.dev/docs/components/lifecycle/#reactive-update-cycle-performing
   protected shouldUpdate(changedProps: PropertyValues): boolean {
     if (!this.config) {
       return false;
     }
-
     return hasConfigOrEntityChanged(this, changedProps, false);
   }
 
-  // https://lit.dev/docs/components/rendering/
   protected render(): TemplateResult | void {
-    // TODO Check for stateObj or other necessary things and render a warning if missing
     if (this.config.show_warning) {
       return this._showWarning(localize('common.show_warning'));
     }
@@ -157,27 +122,30 @@ export class BoilerplateCard extends LitElement {
       >
       ${this.config.show_icon
           ? html`
-               <svg viewBox="0 0 50 50" height="100%" width="50%">
-                <path fill="#ffffff" d=${this.config.icon[0]} />
-                <path class=${classMap({
-                  "state-on-porta-icon":
-                      ifDefined(stateObj? this.computeActiveState(stateObj) : undefined) === "on",
-                    "state-off":
-                    ifDefined(stateObj ? this.computeActiveState(stateObj) : undefined) === "off",
-                  "state-unavailable":
-                    ifDefined(stateObj ? this.computeActiveState(stateObj) : undefined) === "unavailable",
-                }
-                    )
-                }
-                d=${this.config.icon[1]} />
+          <!-- ${console.log("ICON", (JSON.stringify(this.config.icon )==JSON.stringify([room, door])))} -->
+            <svg viewBox="0 0 50 50" height="100%" width="50%">
+              <path fill="#ffffff" d=${this.config.icon[0]} />
+              <path class=${classMap({
+                "state-on-porta-icon":
+                    ifDefined(stateObj? this.computeActiveState(stateObj) : undefined) === "on" && (JSON.stringify(this.config.icon )==JSON.stringify([room, door])),
+                  "state-off-porta-icon":
+                  ifDefined(stateObj ? this.computeActiveState(stateObj) : undefined) === "off" && (JSON.stringify(this.config.icon )==JSON.stringify([room, door])),
+                  "state-on-garagem-icon":
+                    ifDefined(stateObj? this.computeActiveState(stateObj) : undefined) === "on" && (JSON.stringify(this.config.icon )==JSON.stringify([garageOpen, garageClosed])),
+                  "state-off-garagem-icon":
+                  ifDefined(stateObj ? this.computeActiveState(stateObj) : undefined) === "off" && (JSON.stringify(this.config.icon )==JSON.stringify([garageOpen, garageClosed])),
+                "state-unavailable":
+                  ifDefined(stateObj ? this.computeActiveState(stateObj) : undefined) === "unavailable",
+              }
+                  )
+              }
+              fill="#b68349" d=${this.config.icon[1]} />
 
-</svg>
+            </svg>
 
             `
     : ""}
-
     <div>
-
 
     </div>
     ${this.config.show_name
@@ -194,24 +162,12 @@ export class BoilerplateCard extends LitElement {
     ${this.config.show_state
     ? html`
       <div tabindex="-1" class="state-div">
-      ${this.translate_state(stateObj)
-
-      }
+      ${this.translate_state(stateObj)}
       <div class="position"></div>
-     </div>
-     `
-    : ""}
+     </div>`: ""}
     <div>
 
     </div>
-
-
-    <!-- É criado este código para transformar o texto debaixo da "Porta" em "On" e "Off" -->
-    <!-- A ordem foi trocada para garantir que o "On" e "Off" estão debaixo do nome da "Porta" -->
-
-
-
-
       </ha-card>
     `;
   }
@@ -219,11 +175,9 @@ export class BoilerplateCard extends LitElement {
 private computeActiveState = (stateObj: HassEntity): string => {
   const domain = stateObj.entity_id.split(".")[0];
   let state = stateObj.state;
-
   if (domain === "climate") {
     state = stateObj.attributes.hvac_action;
   }
-
   return state;
 };
 
@@ -246,11 +200,11 @@ private computeActiveState = (stateObj: HassEntity): string => {
       error,
       origConfig: this.config,
     });
-
     return html`
       ${errorCard}
     `;
   }
+
   private computeObjectId = (entityId: string): string =>
     entityId.substr(entityId.indexOf(".") + 1);
 
@@ -262,9 +216,11 @@ private computeActiveState = (stateObj: HassEntity): string => {
   private _rippleHandlers: RippleHandlers = new RippleHandlers(() => {
     return this._ripple;
   });
+
   private handleRippleFocus() {
     this._rippleHandlers.startFocus();
   }
+
   static get styles(): CSSResultGroup {
     return css`
       ha-card {
@@ -275,8 +231,6 @@ private computeActiveState = (stateObj: HassEntity): string => {
         text-align: center;
         padding: 4% 0;
         font-size: 1.2rem;
-        /* Deixa ficar os 100% para a width and height, altera nas outras cartas para 100% também.
-        não mexas aqui para ficar mais pequeno, é noutro sítio */
         width: 100%;
         height: 100%;
         box-sizing: border-box;
@@ -287,57 +241,93 @@ private computeActiveState = (stateObj: HassEntity): string => {
         border-radius: 25px;
         padding-left: 10%;
       }
+
       ha-card:focus {
         outline: solid;
         outline-color: white;
       }
+
       ha-icon {
         width: 50%;
-        /* border: 2px solid #73AD21; */
         height: 100%;
         padding: 0px 0px 0px 80px;
         color: var(--paper-item-icon-color, #44739e);
         --mdc-icon-size: 100%;
       }
+
       ha-icon + span {
         margin-top: 3%;
         margin-bottom: 10%;
       }
+
       ha-icon,
       span {
         outline: none;
       }
+
       .hassbut.state-on {
         background: rgba(255,255,255,0.7);
         color: black;
       }
+
       .hassbut {
         display: grid;
         grid-template-columns: 50% 50%;
       }
+
       .state-div {
+        border: 2px solid #73AD21;
         padding: 0px 0px 0px 0px;
         text-align: left;
-        width: 100%;
+        width: 50%;
       }
+
       .name-div {
         padding: 10% 0px 0px 0px;
         text-align: left;
         width: 100%;
       }
-      .porta-icon.state-on {
-        color: var(--paper-item-icon-active-color, #fdd835);
-        animation: state-on 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+
+      .state {
+        animation: state 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
       }
+
+      .state-on-porta-icon {
+        transform: skewY(10deg) translate(4.5%, -3.9%) scaleX(0.8);
+        transition: all 0.5s ease-out;
+        fill: #b68349;
+      }
+      .state-off-porta-icon {
+        animation-direction: reverse;
+        transition: all 0.5s ease-out;
+        fill: #a2743f;
+      }
+      .state-on-garagem-icon {
+        /* transform: skewY(10deg) translate(-4.5%, 3.9%) scaleX(-0.8); */
+        transition: all 0.5s ease-out;
+        visibility: hidden;
+        fill: #b68349;
+      }
+      .state-off-garagem-icon {
+        /* transform: skewY(10deg) translate(4.5%, -3.9%) scaleX(0.8); */
+        transition: all 1.8s ease-out;
+        width: 100px;
+        height: 100px;
+        fill: #a2743f;
+      }
+
       .opacity {
         animation: opacity 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
       }
+
       .reverse {
         animation-direction: reverse;
       }
+
       .porta-icon.state-unavailable {
         color: var(--state-icon-unavailable-color, #bdbdbd);
       }
+
       @keyframes state {
         0% {
           transform: none;
@@ -348,6 +338,8 @@ private computeActiveState = (stateObj: HassEntity): string => {
           fill: #b68349;
         }
       }
+
+
       @keyframes opacity {
         0% {
           opacity: 0;
@@ -355,10 +347,6 @@ private computeActiveState = (stateObj: HassEntity): string => {
         100% {
           opacity: 1;
         }
-      }
-      .state {
-        font-size: 0.9rem;
-        color: var(--secondary-text-color);
       }
     `;
   }

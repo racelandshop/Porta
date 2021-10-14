@@ -15,6 +15,9 @@ const cardConfigStruct = {
 const room = "M11.4,1.4h27.2v43.1H11.4V1.4z";
 const door = "M11.4 1.4v43.1h27.2V1.4H11.4zm23 23.4c0 1.1-.9 1.9-1.9 1.9h0c-1.1 0-1.9-.9-1.9-1.9V21c0-1.1.9-1.9 1.9-1.9h0c1.1 0 1.9.9 1.9 1.9v3.8z";
 
+const garage_closed = "M19,12H16V14H8V12M8,15H16V17H8V15M16,18V20H8V18H16Z";
+const garage_open = "M19,20H17V11H7V20H5V9L12,5L19,9V20M8";
+
 
 const includeDomains = ['switch'];
 @customElement('porta-card-editor')
@@ -79,8 +82,8 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
       return html``;
     }
     this._helpers.importMoreInfoControl('climate');
-    const entities = Object.keys(this.hass.states).filter(
-      (eid) => eid.substr(0, eid.indexOf('.')) === 'switch');
+    //const entities = Object.keys(this.hass.states).filter(
+    //  (eid) => eid.substr(0, eid.indexOf('.')) === 'switch');
 
     return html`
       <div class="card-config">
@@ -94,6 +97,8 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
           @value-changed=${this._valueChanged}
           allow-custom-entity>
         </ha-entity-picker>
+        </div class="card-config">
+        </div class="option">
 
     <div class="side-by-side">
         <paper-input
@@ -131,13 +136,17 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
         .configValue=${"icon"}
         selected='1'
         @iron-select=${this._changed_icon}>
-
-
           <paper-item .value=${[room, door]}>
               <svg viewBox="0 0 50 50" height="24" width="24" >
-              <path fill="#bcbcbc" d="M11.4,1.4h27.2v43.1H11.4V1.4z"/>
-              <path d="M11.4 1.4v43.1h27.2V1.4H11.4zm23 23.4c0 1.1-.9 1.9-1.9 1.9h0c-1.1 0-1.9-.9-1.9-1.9V21c0-1.1.9-1.9 1.9-1.9h0c1.1 0 1.9.9 1.9 1.9v3.8z"/>
+              <path class="opacity"  fill="#ffffff" d=${room}/>
+              <path class="state" fill="#b68349" d=${door}/>
               </svg>Porta
+          </paper-item>
+          <paper-item .value=${[garage_open, garage_closed]}>
+              <svg viewBox="0 0 24 24" height="24" width="24" >
+              <path class="opacity"  fill="#ffffff" d=${garage_open}/>
+              <path class="state" fill="#b68349" d=${garage_closed}/>
+              </svg>Garagem
           </paper-item>
           </paper-listbox>
         </paper-dropdown-menu>
@@ -149,7 +158,12 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
     if (!this._config || !this.hass) {
       return;
     }
-    const target = ev.target! as EditorTarget;
+
+    //const target = ev.target! as EditorTarget;
+    if (ev.target) {
+      const target = ev.target as EditorTarget;
+
+
     const value = target.checked;
 
     if (this[`_${target.configValue}`] === value) {
@@ -162,6 +176,7 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
         [target.configValue!]: value,
       },
     });
+    }
   }
 
   private _initialize(): void {
