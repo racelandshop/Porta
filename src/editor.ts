@@ -15,9 +15,8 @@ const cardConfigStruct = {
 const room = "M11.4,1.4h27.2v43.1H11.4V1.4z";
 const door = "M11.4 1.4v43.1h27.2V1.4H11.4zm23 23.4c0 1.1-.9 1.9-1.9 1.9h0c-1.1 0-1.9-.9-1.9-1.9V21c0-1.1.9-1.9 1.9-1.9h0c1.1 0 1.9.9 1.9 1.9v3.8z";
 
-const garage_closed = "M19,12H16V14H8V12M8,15H16V17H8V15M16,18V20H8V18H16Z";
-const garage_open = "M19,20H17V11H7V20H5V9L12,5L19,9V20M8";
-
+const garageClosed = "M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12M8,15H16V17H8V15M16,18V20H8V18H16Z";
+const garageOpen = "M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12Z";
 
 const includeDomains = ['switch'];
 @customElement('porta-card-editor')
@@ -82,8 +81,6 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
       return html``;
     }
     this._helpers.importMoreInfoControl('climate');
-    //const entities = Object.keys(this.hass.states).filter(
-    //  (eid) => eid.substr(0, eid.indexOf('.')) === 'switch');
 
     return html`
       <div class="card-config">
@@ -110,15 +107,17 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
     </div class="side-by-side">
 
     <div class="div-options">
+      <p>
+      </p>
         <ha-formfield
         .label=${this.hass.localize('ui.panel.lovelace.editor.card.generic.show_name')}
         .dir=${this.dir}>
         <ha-switch
-        .checked=${this._show_name !== false}
-        .configValue=${'show_name'}
-        @change=${this._change}>
+          .checked=${this._show_name !== false}
+          .configValue=${'show_name'}
+          @change=${this._change}>
       </ha-switch>
-      </ha-formfield>
+      </ha-formfield>Mostrar nome?
 
       <ha-formfield
       .label=${this.hass.localize('ui.panel.lovelace.editor.card.generic.show_state')}
@@ -128,8 +127,11 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
         .configValue=${'show_state'}
         @change=${this._change}>
       </ha-switch>
-      </ha-formfield>
+      </ha-formfield>Mostrar estado?
+      <div>
 
+      </div>
+      <paper-input-label-8>Escolha o icon: </paper-input-label-8>
       <paper-dropdown-menu>
       <paper-listbox slot="dropdown-content"
         attr-for-selected="value"
@@ -142,10 +144,10 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
               <path class="state" fill="#b68349" d=${door}/>
               </svg>Porta
           </paper-item>
-          <paper-item .value=${[garage_open, garage_closed]}>
+          <paper-item .value=${[garageOpen, garageClosed]}>
               <svg viewBox="0 0 24 24" height="24" width="24" >
-              <path class="opacity"  fill="#ffffff" d=${garage_open}/>
-              <path class="state" fill="#b68349" d=${garage_closed}/>
+              <path class="opacity"  fill="#ffffff" d=${garageOpen}/>
+              <path class="state" fill="#b68349" d=${garageClosed}/>
               </svg>Garagem
           </paper-item>
           </paper-listbox>
@@ -159,7 +161,6 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
       return;
     }
 
-    //const target = ev.target! as EditorTarget;
     if (ev.target) {
       const target = ev.target as EditorTarget;
 
@@ -189,19 +190,6 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
   private async loadCardHelpers(): Promise<void> {
     this._helpers = await (window as any).loadCardHelpers();
   }
-
-  // private _toggleOption(ev): void {
-  //   this._toggleThing(ev, Option);
-  // }
-
-  // private _toggleThing(ev, optionList): void {
-  //   const show = !optionList[ev.target.option].show;
-  //   for (const [key] of Object.entries(optionList)) {
-  //     optionList[key].show = false;
-  //   }
-  //   optionList[ev.target.option].show = show;
-  //   this._toggle = !this._toggle;
-  // }
 
   private _valueChanged(ev): void {
     if (!this._config || !this.hass) {
@@ -233,6 +221,7 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
     this._config = {
       ...this._config, [ev.target.configValue]: ev.target.selected, "type": 'custom:porta-card'
     }
+    console.log("this._config", this._config);
     fireEvent(this, "config-changed", { config: this._config });
   }
 
@@ -260,11 +249,13 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
       .values {
         padding-left: 16px;
         background: var(--secondary-background-color);
-        display: grid;
+        display: flex;
+        /* display: grid; */
       }
-      ha-formfield {
+      /* ha-formfield {
         padding: 0px 10px 0px 20px;
-      }
+        max-width: 300px;
+      } */
     `;
   }
 }
