@@ -241,7 +241,7 @@ private computeActiveState = (stateObj: HassEntity): string => {
         text-align: center;
         padding: 10px 0px 10px 40px;
         font-size: 1.2rem;
-        width: 75%;
+        width: 100%;
         height: 100%;
         box-sizing: border-box;
         justify-content: center;
@@ -254,10 +254,10 @@ private computeActiveState = (stateObj: HassEntity): string => {
       ha-icon {
         width: 40%;
         height: auto;
-        padding: 20% 0% 5% 10%;
+        padding: 5% 0% 0% 10%;
         color: var(--paper-item-icon-color, #44739e);
         --mdc-icon-size: 100%;
-        margin: 10% 30% 0% 10%;
+        margin: 0% 30% 0% 10%;
       }
 
       ha-icon + span {
@@ -281,24 +281,16 @@ private computeActiveState = (stateObj: HassEntity): string => {
       }
 
       .hassbut.state-off {
-        padding: 10px 100px 10px 5px;
+        padding: 5px 100px 10px 5px;
+        text-align: center;
       }
 
       .hassbut.state-on {
         background: rgba(255,255,255,0.7);
         color: black;
-        padding: 10px 100px 10px 5px;
+        padding: 5px 100px 10px 5px;
+        text-align: center;
       }
-
-      /* .state-off-garagem-icon {
-        width: 100;
-        height: 100%;
-      }
-
-      .state-on-garagem-icon {
-        width: 100;
-        height: 100%;
-      } */
 
       .hassbut {
         display: grid;
@@ -309,7 +301,7 @@ private computeActiveState = (stateObj: HassEntity): string => {
       }
 
       .name-div {
-        padding: 5% 0% 0% 5%;
+        padding: 0% 0% 0% 5%;
       }
 
       .state {
