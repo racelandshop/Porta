@@ -239,10 +239,10 @@ private computeActiveState = (stateObj: HassEntity): string => {
         flex-direction: column;
         align-items: center;
         text-align: center;
-        padding: 4% 0;
+        padding: 10px 0px 10px 40px;
         font-size: 1.2rem;
-        width: 100%;
-        height: 25%;
+        width: 75%;
+        height: 100%;
         box-sizing: border-box;
         justify-content: center;
         position: relative;
@@ -252,15 +252,21 @@ private computeActiveState = (stateObj: HassEntity): string => {
       }
 
       ha-icon {
-        width: 100%;
-        height: 100%;
-        padding: 10px 0px 25px 0px;
+        width: 40%;
+        height: auto;
+        padding: 20% 0% 5% 10%;
         color: var(--paper-item-icon-color, #44739e);
         --mdc-icon-size: 100%;
+        margin: 10% 30% 0% 10%;
       }
 
       ha-icon + span {
-        margin-top: 1%;
+        text-align: left;
+      }
+
+      span {
+        margin: 5% 50% 0% 0%;
+        padding: 0% 100% 0% 0%;
       }
 
       ha-icon,
@@ -268,16 +274,20 @@ private computeActiveState = (stateObj: HassEntity): string => {
         outline: none;
       }
 
+      .state {
+        margin: 0% 50% 5% 0%;
+        padding: 0% 100% 5% 0%;
+        text-align: left;
+      }
+
       .hassbut.state-off {
-        /* padding: 5px 80px 5px 5px; */
-        padding-bottom: 20%;
+        padding: 10px 100px 10px 5px;
       }
 
       .hassbut.state-on {
-        /* padding: 5px 80px 5px 5px; */
         background: rgba(255,255,255,0.7);
         color: black;
-        padding-bottom: 20%;
+        padding: 10px 100px 10px 5px;
       }
 
       /* .state-off-garagem-icon {
@@ -292,18 +302,14 @@ private computeActiveState = (stateObj: HassEntity): string => {
 
       .hassbut {
         display: grid;
-        padding: 10px 125px 0px 10px;
-        /*grid-template-columns: 50% 50%; */
       }
 
       .state-div {
-        /* border: 2px solid #73AD21; */
-        padding: 5px 0px 15px 5px;
+        padding: 0% 0% 0% 5%;
       }
 
       .name-div {
-        /* border: 2px solid #f35b09; */
-        padding: 10px 5px 0px 0px;
+        padding: 5% 0% 0% 5%;
       }
 
       .state {
