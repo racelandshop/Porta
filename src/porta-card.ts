@@ -240,6 +240,7 @@ private computeActiveState = (stateObj: HassEntity): string => {
         align-items: center;
         text-align: center;
         padding: 10px 0px 10px 40px;
+        margin-bottom: 8px;
         font-size: 1.2rem;
         width: 100%;
         height: 100%;
