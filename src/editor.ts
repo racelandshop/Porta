@@ -249,13 +249,12 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
       .values {
         padding-left: 16px;
         background: var(--secondary-background-color);
-        display: flex;
-        /* display: grid; */
+        display: grid;
       }
-      /* ha-formfield {
+      ha-formfield {
         padding: 0px 10px 0px 20px;
-        max-width: 300px;
-      } */
+        max-width: 211px;
+      }
     `;
   }
 }

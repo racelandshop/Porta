@@ -56,7 +56,7 @@ export class BoilerplateCard extends LitElement {
       includeDomains
     );
 
-    return { type: "custom:porta-card", entity: foundEntities[0] || "", "show_name": true, "show_state": true, "name": "raceland", "show_preview": true, "icon": [room, door]};
+    return { type: "custom:porta-card", entity: foundEntities[0] || "", "show_name": true, "show_state": true, "name": "Raceland", "show_preview": true, "icon": [room, door]};
   }
 
   @property({ attribute: false }) public hass!: HomeAssistant;
@@ -142,7 +142,7 @@ export class BoilerplateCard extends LitElement {
       >
       ${this.config.show_icon
           ? html`
-            <svg viewBox="0 0 50 50" height="100%" width="100%">
+            <svg class="svgicon" viewBox="0 0 50 50" height="75%" width="65%">
               <path fill="#ffffff" d=${this.config.icon[0]} />
               <path class=${classMap({
                 "state-on-porta-icon":
@@ -160,6 +160,7 @@ export class BoilerplateCard extends LitElement {
               }
               fill="#b68349" d=${this.config.icon[1]} />
             </svg>
+            <div class="divibut"></div>
             `
     : ""}
 
@@ -235,30 +236,30 @@ private computeActiveState = (stateObj: HassEntity): string => {
 
       ha-card {
         cursor: pointer;
-        display: grid;
+        display: flex;
         flex-direction: column;
-        align-items: center;
-        text-align: center;
-        padding: 10px 0px 10px 40px;
-        margin-bottom: 8px;
-        font-size: 1.2rem;
+        align-items: left;
+        text-align: left;
+        padding: 10% 10% 10% 10%;
+        font-size: 18px;
         width: 100%;
         height: 100%;
         box-sizing: border-box;
         justify-content: center;
         position: relative;
-        background: rgba(53,53,56,0.7);
+        background: rgba(53,53,53,0.8);
         color: white;
         border-radius: 25px;
+        overflow: hidden;
       }
 
       ha-icon {
-        width: 40%;
-        height: auto;
-        padding: 5% 0% 0% 10%;
-        color: var(--paper-item-icon-color, #44739e);
+        width: 70%;
+        height: 80%;
+        padding-bottom: 40px;
+        margin: 0% 0% 0% 0%;
+        color: var(--paper-item-icon-color, #fdd835);
         --mdc-icon-size: 100%;
-        margin: 0% 30% 0% 10%;
       }
 
       ha-icon + span {
@@ -266,8 +267,13 @@ private computeActiveState = (stateObj: HassEntity): string => {
       }
 
       span {
-        margin: 5% 50% 0% 0%;
-        padding: 0% 100% 0% 0%;
+        margin: 5% 50% 1% 0%;
+        padding: 0% 100% 1% 0%;
+      }
+
+      .divibut{
+        padding-bottom: 0%;
+        margin-bottom: 0%;
       }
 
       ha-icon,
@@ -282,33 +288,37 @@ private computeActiveState = (stateObj: HassEntity): string => {
       }
 
       .hassbut.state-off {
-        padding: 5px 100px 10px 5px;
-        text-align: center;
+        text-align: left;
       }
 
       .hassbut.state-on {
-        background: rgba(255,255,255,0.7);
-        color: black;
-        padding: 5px 100px 10px 5px;
-        text-align: center;
+        text-align: left;
       }
 
-      .hassbut {
-        display: grid;
-      }
+      /* .hassbut { */
+        /* display: grid; */
+        /* grid-template-columns: 50% 50%; */
+      /* } */
 
       .state-div {
-        padding: 0% 0% 0% 5%;
+        padding: 0% 100% 10% 0%;
+        align-items: left;
       }
 
       .name-div {
-        padding: 0% 0% 0% 5%;
+        padding: 0% 100% 1% 0%;
+        align-items: left;
+      }
+
+      .svgicon {
+        /* padding: 5% 0% 20% 0%; */
+        padding-bottom: 15px;
+        max-width: 88px;
       }
 
       .state {
         animation: state 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
       }
-
       .state-on-porta-icon {
         transform: skewY(10deg) translate(4.5%, -3.9%) scaleX(0.8);
         transition: all 0.5s ease-out;
