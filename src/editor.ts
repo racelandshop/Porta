@@ -132,21 +132,21 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
 
       </div>
       <paper-input-label-8>Escolha o icon: </paper-input-label-8>
-      <paper-dropdown-menu>
+      <paper-dropdown-menu class="dropdown-icon">
       <paper-listbox slot="dropdown-content"
         attr-for-selected="value"
         .configValue=${"icon"}
         selected='1'
         @iron-select=${this._changed_icon}>
-          <paper-item .value=${[room, door]}>
-              <svg viewBox="0 0 50 50" height="24" width="24" >
+          <paper-item class= "paper-item-door" .value=${[room, door]}>
+              <svg class="svg-door" viewBox="0 0 50 50" height="24" width="24" >
               <path class="opacity"  fill="#ffffff" d=${room}/>
               <path class="state" fill="#b68349" d=${door}/>
               </svg>Porta
           </paper-item>
-          <paper-item .value=${[garageOpen, garageClosed]}>
-              <svg viewBox="0 0 24 24" height="24" width="24" >
-              <path class="opacity"  fill="#ffffff" d=${garageOpen}/>
+          <paper-item class= "paper-item-garagem" .value=${[garageOpen, garageClosed]}>
+              <svg class="svg-garagem" viewBox="0 0 24 24" height="24" width="24" >
+              <path class="opacity" fill="#ffffff" d=${garageOpen}/>
               <path class="state" fill="#b68349" d=${garageClosed}/>
               </svg>Garagem
           </paper-item>
@@ -228,7 +228,7 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
   static get styles(): CSSResultGroup {
     return css`
       .option {
-        padding: 4px 0px;
+        padding: 3% 0%;
         cursor: pointer;
       }
       .row {
@@ -254,6 +254,16 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
       ha-formfield {
         padding: 0px 10px 0px 20px;
         max-width: 211px;
+      }
+      .dropdown-icon {
+        padding-left: 5%;
+      }
+      .svg-door {
+        margin-right: 5%;
+      }
+      .svg-garagem {
+        transform: translate(-10%, -5%) scale(1.5);
+        margin-right: 5%;
       }
     `;
   }

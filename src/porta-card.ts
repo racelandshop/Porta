@@ -30,7 +30,7 @@ console.info(
 (window as any).customCards = (window as any).customCards || [];
 (window as any).customCards.push({
   type: 'porta-card',
-  name: 'Portões / Garagem',
+  name: 'Porta',
   preview: true //IMPORTANTE
 });
 @customElement('porta-card')
@@ -142,17 +142,25 @@ export class BoilerplateCard extends LitElement {
       >
       ${this.config.show_icon
           ? html`
-            <svg class="svgicon" viewBox="0 0 50 50" height="75%" width="65%">
+            <svg class=${classMap({
+                "svgicon-door":
+                  (JSON.stringify(this.config.icon) ==JSON.stringify([room, door])),
+                "svgicon-garagem":
+                  (JSON.stringify(this.config.icon)==JSON.stringify([garageOpen, garageClosed])),
+                }
+                )
+            }
+              viewBox="0 0 50 50" height="75%" width="65%" >
               <path fill="#ffffff" d=${this.config.icon[0]} />
               <path class=${classMap({
                 "state-on-porta-icon":
                   ifDefined(stateObj? this.computeActiveState(stateObj) : undefined) === "on" && (JSON.stringify(this.config.icon) ==JSON.stringify([room, door])),
                 "state-off-porta-icon":
-                  ifDefined(stateObj? this.computeActiveState(stateObj) : undefined) === "off" && (JSON.stringify(this.config.icon)==JSON.stringify([room, door])),
+                  ifDefined(stateObj ? this.computeActiveState(stateObj) : undefined) === "off" && (JSON.stringify(this.config.icon) == JSON.stringify([room, door])),
                 "state-on-garagem-icon":
-                  ifDefined(stateObj? this.computeActiveState(stateObj) : undefined) === "on" && (JSON.stringify(this.config.icon)==JSON.stringify([garageOpen, garageClosed])),
+                ifDefined(stateObj? this.computeActiveState(stateObj) : undefined) === "on" && (JSON.stringify(this.config.icon)==JSON.stringify([garageOpen, garageClosed])),
                 "state-off-garagem-icon":
-                  ifDefined(stateObj? this.computeActiveState(stateObj) : undefined) === "off" && (JSON.stringify(this.config.icon) == JSON.stringify([garageOpen, garageClosed])),
+                ifDefined(stateObj? this.computeActiveState(stateObj) : undefined) === "off" && (JSON.stringify(this.config.icon) == JSON.stringify([garageOpen, garageClosed])),
                 "state-unavailable":
                   ifDefined(stateObj? this.computeActiveState(stateObj) : undefined) === "unavailable",
               }
@@ -169,6 +177,7 @@ export class BoilerplateCard extends LitElement {
       <div tabindex = "-1" class="name-div">
       ${this.config.name}
         </div>
+        <div></div>
       `
     : ""}
 
@@ -177,8 +186,9 @@ export class BoilerplateCard extends LitElement {
       <div tabindex="-1" class="state-div">
       ${this.translate_state(stateObj)}
       <div class="position"></div>
-     </div>`: ""}
+     </div><div></div>`: ""}
       </ha-card>
+
     `;
   }
 
@@ -236,7 +246,7 @@ private computeActiveState = (stateObj: HassEntity): string => {
 
       ha-card {
         cursor: pointer;
-        display: flex;
+        display: grid;
         flex-direction: column;
         align-items: left;
         text-align: left;
@@ -245,7 +255,7 @@ private computeActiveState = (stateObj: HassEntity): string => {
         width: 100%;
         height: 100%;
         box-sizing: border-box;
-        justify-content: center;
+        justify-content: left;
         position: relative;
         background: rgba(53,53,53,0.8);
         color: white;
@@ -256,7 +266,7 @@ private computeActiveState = (stateObj: HassEntity): string => {
       ha-icon {
         width: 70%;
         height: 80%;
-        padding-bottom: 40px;
+        padding-bottom: 15px;
         margin: 0% 0% 0% 0%;
         color: var(--paper-item-icon-color, #fdd835);
         --mdc-icon-size: 100%;
@@ -295,10 +305,10 @@ private computeActiveState = (stateObj: HassEntity): string => {
         text-align: left;
       }
 
-      /* .hassbut { */
-        /* display: grid; */
-        /* grid-template-columns: 50% 50%; */
-      /* } */
+      .hassbut {
+        display: grid;
+        grid-template-columns: 50% 50%;
+      }
 
       .state-div {
         padding: 0% 100% 10% 0%;
@@ -310,10 +320,15 @@ private computeActiveState = (stateObj: HassEntity): string => {
         align-items: left;
       }
 
-      .svgicon {
-        /* padding: 5% 0% 20% 0%; */
-        padding-bottom: 15px;
-        max-width: 88px;
+      .svgicon-door {
+        padding-bottom: 20px;
+        max-width: 170px;
+      }
+
+      .svgicon-garagem {
+        padding-bottom: 20px;
+        max-width: 170px;
+        transform: translate(62%, 55%) scale(2.5);
       }
 
       .state {
@@ -340,6 +355,10 @@ private computeActiveState = (stateObj: HassEntity): string => {
         fill: #b68349;
       }
 
+      .garagem-icon.state-unavailable {
+        color: var(--state-icon-unavailable-color, #bdbdbd);
+      }
+
       .opacity {
         animation: opacity 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
       }
@@ -349,10 +368,6 @@ private computeActiveState = (stateObj: HassEntity): string => {
       }
 
       .porta-icon.state-unavailable {
-        color: var(--state-icon-unavailable-color, #bdbdbd);
-      }
-
-      .garagem-icon.state-unavailable {
         color: var(--state-icon-unavailable-color, #bdbdbd);
       }
 
