@@ -257,8 +257,8 @@ private computeActiveState = (stateObj: HassEntity): string => {
         box-sizing: border-box;
         justify-content: left;
         position: relative;
-        background: rgba(53,53,53,0.8);
-        color: white;
+        background: var(--card-color-background, rgba(53,53,53,0.9));
+        color: var(--card-color-text, white);
         border-radius: 25px;
         overflow: hidden;
       }
