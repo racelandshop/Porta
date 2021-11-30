@@ -117,8 +117,7 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
           .configValue=${'show_name'}
           @change=${this._change}>
       </ha-switch>
-      </ha-formfield>Mostrar nome?
-
+      </ha-formfield>
       <ha-formfield
       .label=${this.hass.localize('ui.panel.lovelace.editor.card.generic.show_state')}
       .dir=${this.dir}>
@@ -127,7 +126,7 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
         .configValue=${'show_state'}
         @change=${this._change}>
       </ha-switch>
-      </ha-formfield>Mostrar estado?
+      </ha-formfield>
       <div>
 
       </div>
@@ -146,8 +145,8 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
           </paper-item>
           <paper-item class= "paper-item-garagem" .value=${[garageOpen, garageClosed]}>
               <svg class="svg-garagem" viewBox="0 0 24 24" height="24" width="24" >
-              <path class="opacity" fill="#ffffff" d=${garageOpen}/>
-              <path class="state" fill="#b68349" d=${garageClosed}/>
+              <path class="opacity" fill="#a9b1bc" d=${garageOpen}/>
+              <path class="state" fill="#a9b1bc" d=${garageClosed}/>
               </svg>Garagem
           </paper-item>
           </paper-listbox>

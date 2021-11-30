@@ -166,7 +166,7 @@ export class BoilerplateCard extends LitElement {
               }
                   )
               }
-              fill="#b68349" d=${this.config.icon[1]} />
+              d=${this.config.icon[1]} />
             </svg>
             <div class="divibut"></div>
             `
@@ -352,7 +352,7 @@ private computeActiveState = (stateObj: HassEntity): string => {
       }
 
       .state-off-garagem-icon {
-        fill: #b68349;
+        fill: #a9b1bc;
       }
 
       .garagem-icon.state-unavailable {
