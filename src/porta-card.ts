@@ -17,9 +17,10 @@ import { localize } from './localize/localize';
 
 const room = "M11.4,1.4h27.2v43.1H11.4V1.4z";
 const door = "M11.4 1.4v43.1h27.2V1.4H11.4zm23 23.4c0 1.1-.9 1.9-1.9 1.9h0c-1.1 0-1.9-.9-1.9-1.9V21c0-1.1.9-1.9 1.9-1.9h0c1.1 0 1.9.9 1.9 1.9v3.8z";
-
 const garageClosed = "M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12M8,15H16V17H8V15M16,18V20H8V18H16Z";
 const garageOpen = "M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12Z";
+const sidegateClosed = "M15.867 25.984v6.774h18.07V19.21h-18.07Zm16.848-4.925v.617H17.09V20.44h15.625Zm0 2.464v.614H17.09v-1.23h15.625Zm0 2.461v.618H17.09v-1.23h15.625Zm0 2.465v.613H17.09v-1.23h15.625Zm0 2.461v.617H17.09v-1.23h15.625Zm0 0";
+const sidegateOpen = "M7.324 12.563v4.68H0V33.25h50.047V17.242H42.48v-9.36h-6.105v24.876H13.43V7.883H7.324Zm0 0";
 
 console.info(
   `%c  RACELAND-porta-card \n%c  ${localize('common.version')} ${CARD_VERSION}    `,
@@ -55,7 +56,6 @@ export class BoilerplateCard extends LitElement {
       entitiesFallback,
       includeDomains
     );
-
     return { type: "custom:porta-card", entity: foundEntities[0] || "", "show_name": true, "show_state": true, "name": "Raceland", "show_preview": true, "icon": [room, door]};
   }
 
@@ -65,7 +65,6 @@ export class BoilerplateCard extends LitElement {
     if (!config) {
       throw new Error(localize('common.invalidconfiguration'));
     }
-
     if (config.test_gui) {
       getLovelace().setEditMode(true);
     }
@@ -115,7 +114,6 @@ export class BoilerplateCard extends LitElement {
     if (this.config.show_warning) {
       return this._showWarning(localize('common.show_warning'));
     }
-
     if (this.config.show_error) {
       return this._showError(localize('common.show_error'));
     }
@@ -144,23 +142,29 @@ export class BoilerplateCard extends LitElement {
           ? html`
             <svg class=${classMap({
                 "svgicon-door":
-                  (JSON.stringify(this.config.icon) ==JSON.stringify([room, door])),
+                  (JSON.stringify(this.config.icon) == JSON.stringify([room, door])),
                 "svgicon-garagem":
-                  (JSON.stringify(this.config.icon)==JSON.stringify([garageOpen, garageClosed])),
+                  (JSON.stringify(this.config.icon) == JSON.stringify([garageOpen, garageClosed])),
+                "svgicon-sidegate":
+                  (JSON.stringify(this.config.icon) == JSON.stringify([sidegateOpen, sidegateClosed])),
                 }
                 )
             }
               viewBox="0 0 50 50" height="75%" width="65%" >
-              <path fill="#ffffff" d=${this.config.icon[0]} />
+              <path fill="#a9b1bc" d=${this.config.icon[0]} />
               <path class=${classMap({
                 "state-on-porta-icon":
                   ifDefined(stateObj? this.computeActiveState(stateObj) : undefined) === "on" && (JSON.stringify(this.config.icon) ==JSON.stringify([room, door])),
                 "state-off-porta-icon":
                   ifDefined(stateObj ? this.computeActiveState(stateObj) : undefined) === "off" && (JSON.stringify(this.config.icon) == JSON.stringify([room, door])),
                 "state-on-garagem-icon":
-                ifDefined(stateObj? this.computeActiveState(stateObj) : undefined) === "on" && (JSON.stringify(this.config.icon)==JSON.stringify([garageOpen, garageClosed])),
+                  ifDefined(stateObj? this.computeActiveState(stateObj) : undefined) === "on" && (JSON.stringify(this.config.icon)==JSON.stringify([garageOpen, garageClosed])),
                 "state-off-garagem-icon":
-                ifDefined(stateObj? this.computeActiveState(stateObj) : undefined) === "off" && (JSON.stringify(this.config.icon) == JSON.stringify([garageOpen, garageClosed])),
+                  ifDefined(stateObj ? this.computeActiveState(stateObj) : undefined) === "off" && (JSON.stringify(this.config.icon) == JSON.stringify([garageOpen, garageClosed])),
+                "state-on-sidegate-icon":
+                  ifDefined(stateObj? this.computeActiveState(stateObj) : undefined) === "on" && (JSON.stringify(this.config.icon)==JSON.stringify([sidegateOpen, sidegateClosed])),
+                "state-off-sidegate-icon":
+                  ifDefined(stateObj ? this.computeActiveState(stateObj) : undefined) === "off" && (JSON.stringify(this.config.icon) == JSON.stringify([sidegateOpen, sidegateClosed])),
                 "state-unavailable":
                   ifDefined(stateObj? this.computeActiveState(stateObj) : undefined) === "unavailable",
               }
@@ -188,7 +192,6 @@ export class BoilerplateCard extends LitElement {
       <div class="position"></div>
      </div><div></div>`: ""}
       </ha-card>
-
     `;
   }
 
@@ -243,7 +246,6 @@ private computeActiveState = (stateObj: HassEntity): string => {
 
   static get styles(): CSSResultGroup {
     return css`
-
       ha-card {
         cursor: pointer;
         display: grid;
@@ -331,9 +333,16 @@ private computeActiveState = (stateObj: HassEntity): string => {
         transform: translate(62%, 55%) scale(2.5);
       }
 
+      .svgicon-sidegate {
+        padding-left: 10px;
+        padding-bottom: 20px;
+        transform: scale(1.3);
+      }
+
       .state {
         animation: state 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
       }
+
       .state-on-porta-icon {
         transform: skewY(10deg) translate(4.5%, -3.9%) scaleX(0.8);
         transition: all 0.5s ease-out;
@@ -355,7 +364,27 @@ private computeActiveState = (stateObj: HassEntity): string => {
         fill: #a9b1bc;
       }
 
+      .state-on-sidegate-icon {
+        fill: #a9b1bc;
+        transform: translate(15px);
+        transition: all 2s ease-out;
+      }
+
+      .state-off-sidegate-icon {
+        fill: #a9b1bc;
+        transform: translate(0px);
+        transition: all 2s ease-out;
+      }
+
+      .porta-icon.state-unavailable {
+        color: var(--state-icon-unavailable-color, #bdbdbd);
+      }
+
       .garagem-icon.state-unavailable {
+        color: var(--state-icon-unavailable-color, #bdbdbd);
+      }
+
+      .sidegate-icon.state-unavailable {
         color: var(--state-icon-unavailable-color, #bdbdbd);
       }
 
@@ -366,11 +395,6 @@ private computeActiveState = (stateObj: HassEntity): string => {
       .reverse {
         animation-direction: reverse;
       }
-
-      .porta-icon.state-unavailable {
-        color: var(--state-icon-unavailable-color, #bdbdbd);
-      }
-
 
       @keyframes state {
         0% {
