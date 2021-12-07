@@ -12,12 +12,13 @@ const cardConfigStruct = {
     show: true,
   },
 };
+
 const room = "M11.4,1.4h27.2v43.1H11.4V1.4z";
 const door = "M11.4 1.4v43.1h27.2V1.4H11.4zm23 23.4c0 1.1-.9 1.9-1.9 1.9h0c-1.1 0-1.9-.9-1.9-1.9V21c0-1.1.9-1.9 1.9-1.9h0c1.1 0 1.9.9 1.9 1.9v3.8z";
-
 const garageClosed = "M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12M8,15H16V17H8V15M16,18V20H8V18H16Z";
 const garageOpen = "M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12Z";
-
+const sidegateClosed = "M15.867 25.984v6.774h18.07V19.21h-18.07Zm16.848-4.925v.617H17.09V20.44h15.625Zm0 2.464v.614H17.09v-1.23h15.625Zm0 2.461v.618H17.09v-1.23h15.625Zm0 2.465v.613H17.09v-1.23h15.625Zm0 2.461v.617H17.09v-1.23h15.625Zm0 0";
+const sidegateOpen = "M7.324 12.563v4.68H0V33.25h50.047V17.242H42.48v-9.36h-6.105v24.876H13.43V7.883H7.324Zm0 0";
 const includeDomains = ['switch'];
 @customElement('porta-card-editor')
 export class BoilerplateCardEditor extends LitElement implements LovelaceCardEditor {
@@ -36,7 +37,6 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
     if (!this._initialized) {
       this._initialize();
     }
-
     return true;
   }
 
@@ -149,6 +149,12 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
               <path class="state" fill="#a9b1bc" d=${garageClosed}/>
               </svg>Garagem
           </paper-item>
+          <paper-item class= "paper-item-iron" .value=${[sidegateOpen, sidegateClosed]}>
+              <svg class="svg-iron" viewBox="0 0 50 50" height="24" width="24" >
+              <path class="opacity"  fill="#a9b1bc" d=${sidegateOpen}/>
+              <path class="state" fill="#a9b1bc" d=${sidegateClosed}/>
+              </svg>Portão
+          </paper-item>
           </paper-listbox>
         </paper-dropdown-menu>
     </div>
@@ -159,13 +165,9 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
     if (!this._config || !this.hass) {
       return;
     }
-
     if (ev.target) {
       const target = ev.target as EditorTarget;
-
-
     const value = target.checked;
-
     if (this[`_${target.configValue}`] === value) {
       return;
     }
@@ -258,11 +260,15 @@ export class BoilerplateCardEditor extends LitElement implements LovelaceCardEdi
         padding-left: 5%;
       }
       .svg-door {
-        margin-right: 5%;
+        margin-right: 2.5%;
       }
       .svg-garagem {
         transform: translate(-10%, -5%) scale(1.5);
-        margin-right: 5%;
+        margin-right: 2.5%;
+      }
+      .svg-iron {
+        margin-right: 2.5%;
+        transform: translate(-10%, -5%) scale(1);
       }
     `;
   }
