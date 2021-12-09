@@ -351,7 +351,7 @@ private computeActiveState = (stateObj: HassEntity): string => {
 
       .state-off-porta-icon {
         animation-direction: reverse;
-        transition: all 0.5s ease-out;
+        transition-timing-function: all 0.5s ease-out;
         fill: #a2743f;
       }
 
@@ -367,13 +367,13 @@ private computeActiveState = (stateObj: HassEntity): string => {
       .state-on-sidegate-icon {
         fill: #a9b1bc;
         transform: translate(15px);
-        transition: all 2s ease-out;
+        transition-timing-function: all 2s ease-out;
       }
 
       .state-off-sidegate-icon {
         fill: #a9b1bc;
         transform: translate(0px);
-        transition: all 2s ease-out;
+        transition-timing-function: all 2s ease-out;
       }
 
       .porta-icon.state-unavailable {
